@@ -34,14 +34,13 @@ export default function Posts({ handleMouseLeave, handleMouseEnter, posts, delay
                 const Url=`/posts_now/${posts.id}/`
                 axiosInstance.delete(Url).then((res) => {
                     window.location.reload(true);
-                    console.log(res.data);
                 });
     }
 
     const editPost = (event) => {
         event.preventDefault();
         const Url = `/posts_later/${posts.id}/`
-        axiosInstance.delete(Url).put((res) => {
+        axiosInstance.delete(Url).then((res) => {
             window.location.reload(true);
             console.log(res.data);
         });

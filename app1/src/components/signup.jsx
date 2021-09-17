@@ -96,7 +96,6 @@ function SignUp() {
                             />
                             <br/>
 
-
                             <label>
                                 Email
                             </label>

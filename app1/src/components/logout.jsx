@@ -13,6 +13,7 @@ export default function Logout() {
 		});
 		localStorage.removeItem('current_user')
 		localStorage.removeItem('current_user_id')
+	
 		
 		axiosInstance.defaults.headers['Authorization'] = null;
 		history.push('/login');

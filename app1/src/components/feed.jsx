@@ -140,7 +140,7 @@ export default class Feed extends Component {
     render() {
          return (
              <>
-                 
+                
                     <div className="post-box card ">
                         <C_post />
                     </div>
@@ -151,7 +151,7 @@ export default class Feed extends Component {
                             <Spinner animation="border" className="ml-5"/>
                         ): (
                                    <Slider className="slides" {...this.settings} >
-                                          {this.state.posts.id == null ? (
+                                          {this.state.posts.id === null ? (
                                              
                                                  <><p className="mt-3">No posts</p><img
                                                     alt="pic"
@@ -186,7 +186,7 @@ export default class Feed extends Component {
                             <Spinner animation="border" className="ml-5" />
                             ):(
                              <Slider className="slides2" {...this.settings} >
-                                 {this.state.posts_old.id == null ? (
+                                 {this.state.posts_old.id === null ? (
 
                                      <><p className="mt-3">No posts</p><img
                                          alt="pic"

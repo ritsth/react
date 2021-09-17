@@ -4,6 +4,7 @@ import ModalPhoto from './modal';
 import axiosInstance from '../axios';
 import p from './profileLogo.svg';
 import Cropper from "react-cropper";
+import $ from "jquery";
 
 function Profile({ match }) {
     const [cropModal, setCropModal] = useState(false);
@@ -25,11 +26,19 @@ function Profile({ match }) {
     const [pState, setpState] = useState({
         user_photo: ''
     });
+    const [nearbyDevices, setNearbyDevices] = useState({
+            devices: ''
+    })
+    const [deviceNames, setDeviceNames] = useState({
+            names: ''
+    })
     const [plantData, setPlantData] = useState({
         plant: [{
         name_text: '',
         type_text: '',
-        plant_img:''}]
+        plant_img: '',
+        device: '',
+        }]
     });
     const [plantsData, setPlantsData] = useState({
         plant: [{ id: '', name_text: '', pub_date: '', plant_img: '', type_text: '', user: '' }],
@@ -39,8 +48,9 @@ function Profile({ match }) {
         setPlantData({
             ...plantData,
             [event.target.name]: event.target.value.trim(),
+            device: nearbyDevices.devices
         });
-
+        
     }
 
     const fileSelector = (event) => {
@@ -60,9 +70,17 @@ function Profile({ match }) {
         setcanvas({ c: cropper.getCroppedCanvas() });
         setCropModal(false);
     }
-
+    const nextDevice = (e) => {
+        e.preventDefault()
+        axiosInstance.post('/nearbyDevices/').then((res) => {
+            const Data = res.data;
+            setNearbyDevices({ devices: Data.nearbyDevices});
+            setDeviceNames({ names: Data.deviceNames });
+            console.log(Data)
+        });
+    }
     useEffect(() => {
-
+       
         const user_id = parseInt(match.params.userId)
         var URL = `/users/${user_id}`;
         axiosInstance.get(URL).then((res) => {
@@ -77,8 +95,15 @@ function Profile({ match }) {
             setPlantsData({ loading: false,plant: data });
             console.log(data);
         });
+   
+        axiosInstance.get('nearbyDevices/').then((res) => {
+            const Data = res.data;
+            setNearbyDevices({ devices: Data.nearbyDevices });
+            setDeviceNames({ names: Data.deviceNames });
+            console.log(Data)
+        });
 
-    }, [setAppState, setpState, setPlantsData]);
+    }, [setAppState, setpState, setPlantsData, setNearbyDevices,setDeviceNames]);
 
 
     const handleSubmit = (event) => {
@@ -91,6 +116,7 @@ function Profile({ match }) {
             let formData = new FormData();
             formData.append('type_text',plantData.type_text);
             formData.append('name_text', plantData.name_text);
+            formData.append('device', plantData.device);
             formData.append('plant_img', blob, `${Img.i.name}`);
 
             axiosInstance
@@ -114,10 +140,12 @@ function Profile({ match }) {
         setView(true);
     }
 
-
+    const regexp = /./g;
+    const r = [...$('#own_tiles_tuple').text().matchAll(regexp)];
     const date = (new Date(appState.user.date_joined)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2 $3');
         return (
             <>
+
                 <Modal size="auto" show={cropModal} onHide={handleClose3} aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <div className="postCrop">
@@ -154,14 +182,6 @@ function Profile({ match }) {
                             <form onSubmit={handleSubmit}>
 
                                 <label>
-                                    Type
-                                </label>
-                                <select class="form-select" name="type" >
-                                    <option selected disabled>Select your plant</option>
-                                    
-                                </select>
-
-                                <label>
                                     Name 
                                 </label>
                                 <input required style={{ width: 770 }}
@@ -191,6 +211,16 @@ function Profile({ match }) {
                                     type="file"
                                     onChange={fileSelector}
                                 />
+                                <label>
+                                    Select bluetooth device
+                                </label>
+                                <input style={{ width: 600 }}
+                                    class="form-control"
+                                    type="text"
+                                    placeholder={deviceNames.names}
+                               
+                                />
+                                <button className="btn btn-success " onClick={nextDevice}>></button>
                                 <button className="btn btn-success mt-3 center">Add Plant</button>
                             </form>
 
@@ -209,7 +239,7 @@ function Profile({ match }) {
 
                 </Modal>
                 <div className="top-profile mt-4">
-                <Container >
+                    <Container >
                     <h3 className=" mt-4 mb-4 lead mr-2" ><u>My Profile</u></h3> 
                         <figure className="position-relative profile">
                             <div onMouseEnter={handleView} onMouseLeave={handleClose}>
@@ -247,7 +277,7 @@ function Profile({ match }) {
                     </div>                      
                             )}
                     <br/>
-                    <button className="btn btn-primary mt-3" onClick={() => setAddPlantModal(true)}>Add Plant</button>
+                    <button className="btn btn-success mb-1" onClick={() => setAddPlantModal(true)}>Add Plant</button>
                 </div>
 
                 <div className="profileBody ">
@@ -256,12 +286,12 @@ function Profile({ match }) {
                         className="ml-5" />)
                         : (<>
                         
-                            {plantsData.plant.filter(p => p.user === parseInt(match.params.userId)).map((plant) =>
+                            {plantsData.plant.filter(p => p.user === parseInt(match.params.userId))
+                                .map((plant) =>
                                     <div key={plant.id} className="ml-5 mr-5"   >
-                                    <a href="#"><img alt="pic" src={plant.plant_img} width="350" height="270" />
-                                        
-                                    </a>
-                     
+                                        <a href={'/plantStatus/'+`${plant.id}/`}>
+                                           <img alt="pic" src={plant.plant_img} width="350" height="270" />
+                                        </a>
                                     </div>
                                 )}
 
