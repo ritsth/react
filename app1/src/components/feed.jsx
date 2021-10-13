@@ -58,7 +58,6 @@ export default class Feed extends Component {
         posts_old: [{ id: '', status: '', pub_date: '', post_img: '', type: '', user: '', user_name3: '' }],
         profile_photo: [{ user: '',profile_photo: ''}],
         comments: [{comment_text:'',pub_date:'',user:'',user_name1:'',id:'',post:''}],
-        delayHandler: false,
         loading:true,
           
     };
@@ -66,19 +65,6 @@ export default class Feed extends Component {
 
     close = () => {
         this.setState({show_create_post: false })
-    }
-
-    handleMouseEnter = event => {
-           setTimeout(() => {
-               this.setState({ delayHandler: true })
-           }, 200)
-
-    }
-
-
-    handleMouseLeave = () => {
-        clearTimeout(this.state.delayHandler);
-        this.setState({ delayHandler: false })
     }
 
     componentDidMount() {
@@ -103,7 +89,6 @@ export default class Feed extends Component {
             axiosInstance.get('/comment').then((res) => {
                 const data= res.data;
                 this.setState({ loading: false,  comments: data});
-                console.log(data);
             });
 
     };
@@ -151,7 +136,7 @@ export default class Feed extends Component {
                             <Spinner animation="border" className="ml-5"/>
                         ): (
                                    <Slider className="slides" {...this.settings} >
-                                          {this.state.posts.id === null ? (
+                                          {this.state.posts[0] == null ? (
                                              
                                                  <><p className="mt-3">No posts</p><img
                                                     alt="pic"
@@ -181,22 +166,20 @@ export default class Feed extends Component {
                     </div>
 
                      <div className="">
-                         <p className="heading2">Old ones (2 days ago ...)</p>
+                         <p className="heading2">Old posts</p>
                         {this.state.loading==true?(
                             <Spinner animation="border" className="ml-5" />
                             ):(
                              <Slider className="slides2" {...this.settings} >
-                                 {this.state.posts_old.id === null ? (
+                                 {this.state.posts_old[0] == null ? (
 
-                                     <><p className="mt-3">No posts</p><img
+                                     <><p className="mt-3">No older posts</p><img
                                          alt="pic"
                                          src="https://i.pinimg.com/564x/18/c8/25/18c8257fc8d68973cfcf7c50d3a66646.jpg"
                                          className="ml-5"
                                      />
                                      </>
-                                 
                                      )
-                             
                                      : (this.state.posts_old.map((posts) => {
 
                                          return <Posts_old
@@ -208,6 +191,7 @@ export default class Feed extends Component {
                                              posts={posts}
                                              delayHandler={this.state.delayHandler}
                                              user={this.state.user}
+                                             comment={this.state.comments}
                                          />
                                      }
                                      ))}

@@ -138,9 +138,10 @@ function SignUp() {
                             </Row>
                             <br />
                             <button type="submit" className="btn btn-success mb-2 ">Submit</button>
-                            <p>Already have an account?<a href="/login"  ><u> Click here</u></a></p>
+                            <p>Already have an account?<a href="/login"> Click here</a></p>
 
                         </form>
+                  
                     </figcaption>
                 </figure>
             </Container>

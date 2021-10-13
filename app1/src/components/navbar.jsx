@@ -120,9 +120,9 @@ class Navcom extends Component {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
 
+                            
+                                <Nav.Link className="ml-5 mr-4" href="/feed">&nbsp;  Feed</Nav.Link>
                             {localStorage.getItem('current_user') !== null ? (
-                                <Nav.Link className="ml-5 mr-4" href="/feed">&nbsp;  Feed</Nav.Link>):null}
-
                             <NavDropdown className="ml-5  " onClick={this.checked}
                                 title={<><i class="fa fa-bell" ></i>
                                     {this.state.count || localStorage.getItem('count')> 0 ?
@@ -147,7 +147,7 @@ class Navcom extends Component {
                                         } >ok</button>
                                     </NavDropdown.Item>
                                 </>)}
-                            </NavDropdown>
+                            </NavDropdown>):null}
                         </Nav>
                         <Nav>
                             <Form inline onSubmit={this.handleSubmit}>

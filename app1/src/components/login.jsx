@@ -89,7 +89,7 @@ export default function Login() {
                             />
                             <br />
                             <button  className="btn btn-success mb-4 ">Submit</button>
-                            <p>Don't have an account?<a href="/signup"  ><u> Click here</u></a></p>
+                            <p>Don't have an account?<a href="/signup" style={{ color: "blue" }}> Click here</a></p>
                         </form>
                         <br/>
                         <br/>

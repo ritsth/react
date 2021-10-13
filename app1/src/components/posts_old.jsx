@@ -1,10 +1,19 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card, Button, Row, Col, Image, Modal, Container, Dropdown, DropdownButton, OverlayTrigger, Popover } from 'react-bootstrap';
 import axiosInstance from '../axios';
 
-export default function Posts_old({ postComments, Contents, handleMouseLeave, handleMouseEnter, posts, delayHandler,user }) {
-
+export default function Posts_old({ postComments, comment, Contents, handleMouseLeave, handleMouseEnter, posts, delayHandler, user }) {
+ 
     const pub_date = (new Date(posts.pub_date)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2 $3');
+    const [isLogedin, setIsLogedin] = useState(false)
+    const [showComment, setShowComment] = useState(false);
+    const close = () => setShowComment(false);
+
+
+    const [commentData, setCommentData] = useState({
+        comment_text: '',
+
+    })
 
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
         <p
@@ -34,7 +43,70 @@ export default function Posts_old({ postComments, Contents, handleMouseLeave, ha
             console.log(res.data);
         });
     }
+
+    const inputChanged = (event) => {
+        setCommentData({
+            ...commentData,
+            [event.target.name]: event.target.value.trim(),
+        });
+
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const URL = '/comment/';
+        axiosInstance
+            .post(URL, {
+                comment_text: commentData.comment_text,
+                post: `${posts.id}`
+            })
+            .then((res) => {
+                console.log(res.data);
+                window.location.reload(true);
+            })
+    }
     return (<>
+        <Modal size="lg" className="" show={isLogedin} onHide={() => setIsLogedin(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+            <Modal.Header closeButton className=" ">
+                <p>Don't have an account?<a href="/signup"> Click here</a></p>
+            </Modal.Header>
+            <Modal.Header >
+                <Modal.Title>
+                    <a href="/login">Login </a>  first to add posts !!
+                    </Modal.Title>
+            </Modal.Header>
+        </Modal>
+
+        <Modal size="lg"
+            className=""
+            show={showComment}
+            onHide={close}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered>
+            <Modal.Header closeButton className="modal-top ">
+                Comments
+            </Modal.Header>
+            <Modal.Header >
+                <Modal.Title>
+                    <form onSubmit={handleSubmit}>
+                        <input required
+                            style={{ width: 770 }}
+                            placeholder="write a comment .  .  ."
+                            class="form-control"
+                            type="text"
+                            onChange={inputChanged}
+                            name="comment_text"
+                        />
+                        <button
+                            className="btn btn-success mt-3"
+                        >comment</button>
+                    </form>
+
+                </Modal.Title>
+            </Modal.Header>
+
+        </Modal> 
+
         <div key={posts.id} className="cards" >
             <div className="card-header card-top"><Row><Col sm={10}>
                 <a href={`/profile/${posts.user}`}>
@@ -103,32 +175,79 @@ export default function Posts_old({ postComments, Contents, handleMouseLeave, ha
             </div>
 
 
-            <Row>
-                <Col className="post_img">
+            <Row sm={12}>
+                <Col sm={6}>
                     <Image alt="pic" src={posts.post_img}
                         width="380"
                         height="280"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
+
                     />
-                    {delayHandler &&
-                        <div id={posts.id} className="index">click to see all the posts by the user</div>
-                    }
+
                 </Col>
-                <Col className="mr-5">
-                    <div className="container">
+                <Col sm={6}>
+                    <div className="container ">
                         <br />
-                        <strong className="text-primary  ">{posts.type_name}</strong>
-                        <h5 className="mt-3 mb-1" >
+                        <strong className="text-primary">{posts.type_name}</strong>
+                        <h5 className="mt-3 mb-1 " >
                             {posts.user_name3}</h5>
                         <div className="text-muted mb-3 ml-2" >{pub_date} </div>
-                        <p className="card-text h4 mb-4" style={{ fontFamily: "ariel" }}>{posts.status}</p>
+                        <p className="card-text  mb-4" style={{ fontSize: "18px" }}>{posts.status}</p>
 
-                        <div className="flex" id={`${posts.id}`}
-                            onClick={postComments} >
-                            <i className="fa fa-comments fa-3x "></i>
-                            <small className="text-muted ml-2">drop a comment ...</small>
-                        </div>
+                        <div className="display" id={`${posts.id}`}
+                            onClick={localStorage.getItem('current_user_id') != null ?
+                                (() => setShowComment(true))
+                                : (() => setIsLogedin(true))} >
+                            <i className="fa fa-comments fa-2x "></i>
+                            <p data-toggle="popover"
+                                title="Click here to comment"
+                                className="text-muted ml-2">drop a comment ...
+                            </p>
+                        </div>  
+                        {comment.filter(c => c.post == posts.id).slice(0, 1).map((comment) => <>
+                            <div className="commentSection">
+                                <Image src={localStorage.getItem(`photo-${comment.user}`) !==
+                                    localStorage.getItem(`photo-`) ?
+                                    (localStorage.getItem(`photo-${comment.user}`))
+                                    : (process.env.PUBLIC_URL + "empty profile.png")}
+                                    className="profile_img mt-1"
+                                    width="31"
+                                    height="31"
+                                    alt="pic"
+                                    roundedCircle
+                                />
+
+                                <div className="container">
+
+                                    <small className="card-title "
+                                        style={{ fontSize: "13px", fontWeight: "650" }}>{comment.user_name1}
+                                    </small>
+                                    <small className="text-muted ml-2 "
+                                        style={{ fontSize: "11px" }}
+                                    >
+                                        {(new Date(comment.pub_date)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$2 $1 ')}
+                                    </small>{comment.user == localStorage.getItem('current_user_id') ? (<>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                            className="fa fa-info-circle ml-5 text-muted "
+                                            data-toggle="popover"
+                                            title="Click here to delete this comment"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => axiosInstance.delete(`/comment/${comment.id}/`).then(window.location.reload())}
+                                        ></i></>) : (null)}
+
+                                    <p className="card-text " style={{ fontSize: "14px" }}
+                                        onClick={() => axiosInstance.delete(`/comment/${comment.id}/`)}>
+                                        {comment.comment_text} <a href="#" className="ml-5">see all comments &nbsp;
+                                                                                <i className="fa fa-angle-double-right  "></i>
+                                        </a>
+
+                                    </p>
+                                </div>
+                            </div>
+
+                        </>
+                        )}
                     </div>
                 </Col>
             </Row>

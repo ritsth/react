@@ -8,6 +8,7 @@ export default function C_post(props) {
     const [cropModal, setCropModal] = useState(false);
     const handleClose3 = () => setCropModal(false);
     const [ModalState, setModalState] = useState(false);
+    const [isLogedin, setIsLogedin] = useState(false)
     const history = useHistory();
     const initialPostData = Object.freeze({
         user:'',
@@ -99,7 +100,8 @@ export default function C_post(props) {
     return (
         <>
             <div className="card-header" >
-                <a href={`/profile/${localStorage.getItem('current_user_id')}`}> <Image
+                <a href={localStorage.getItem('current_user_id') != null ?
+                    (`/profile/${localStorage.getItem('current_user_id')}`) : ('/login')}> <Image
                     alt="pic"
                     roundedCircle
                     width="47"
@@ -112,7 +114,10 @@ export default function C_post(props) {
                     data-toggle="popover"
                     title="Click here to post"
                     style={{ cursor: "pointer" }}
-                    onClick={()=>setModalState(true)}>
+                    onClick={localStorage.getItem('current_user_id') != null ?
+                        (() => setModalState(true))
+                        :
+                        (() => setIsLogedin(true))}>
                     What's going on with your plants ? Post Something ...
                 </big><br />
             </div>
@@ -167,7 +172,7 @@ export default function C_post(props) {
                             <label>
                                 Status
                             </label>
-                            <input required style={{ width: 770 }}
+                            <input style={{ width: 770 }}
                                 name="status"
                                 placeholder="say something ..."
                                 class="form-control"
@@ -190,6 +195,18 @@ export default function C_post(props) {
                     </Modal.Title>
                 </Modal.Header>
             </Modal>
+
+            <Modal size="lg" className="" show={isLogedin} onHide={() => setIsLogedin(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+                <Modal.Header closeButton className=" ">
+                    <p>Don't have an account?<a href="/signup"> Click here</a></p>
+                </Modal.Header>
+                <Modal.Header >
+                    <Modal.Title>
+                        <a href="/login">Login </a>  first to add posts !!
+                    </Modal.Title>
+                </Modal.Header>
+            </Modal>
+
         </>
         );
 }
