@@ -37,25 +37,25 @@ function App({}) {
             <Navcom />
             
             <BrowserRouter>
-                   <Route path="/feed" exact>
+                   <Route path="/feed" >
                        <Feed
                             />
                    </Route>
-                    <Route path='/plantStatus/:userId' render={props => <PlantStatus {...props} />} exact/>
+                    <Route path='/plantStatus/:userId' render={props => <PlantStatus {...props} />} />
                    
                     <Route path="/" exact >
                         <Home />
                     </Route>
-                    <Route path='/profile/:userId' render={props => <Profile {...props}/>} exact/>
+                    <Route path='/profile/:userId' render={props => <Profile {...props}/>} />
                        
          
-                    <Route path="/signup" exact >
+                    <Route path="/signup"  >
                         <SignUp />
                     </Route>
-                    <Route path="/login" exact >
+                    <Route path="/login" >
                         <Login  />
                     </Route>                    
-                    <Route path="/logout" exact >
+                    <Route path="/logout"  >
                         <Logout />
                     </Route>
                 </BrowserRouter>

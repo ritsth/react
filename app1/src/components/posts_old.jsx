@@ -7,8 +7,7 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
     const pub_date = (new Date(posts.pub_date)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2 $3');
     const [isLogedin, setIsLogedin] = useState(false)
     const [showComment, setShowComment] = useState(false);
-    const close = () => setShowComment(false);
-
+    const [addComment, setAddComment] = useState(false);
 
     const [commentData, setCommentData] = useState({
         comment_text: '',
@@ -37,11 +36,7 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
     }
     const editPost = (event) => {
         event.preventDefault();
-        const Url = `/posts_later/${posts.id}/`
-        axiosInstance.delete(Url).put((res) => {
-            window.location.reload(true);
-            console.log(res.data);
-        });
+        alert("underconstruction !!")
     }
 
     const inputChanged = (event) => {
@@ -66,6 +61,95 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
             })
     }
     return (<>
+
+        <Modal size="lg"
+            className=""
+            show={showComment}
+            onHide={() => setShowComment(false)}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered>
+            <Modal.Header closeButton className="modal-top ">
+                All Comments
+                                                                </Modal.Header>
+            <Modal.Header >
+                <Modal.Title>
+                    {
+                        comment.filter(c => c.post == posts.id).map((comment) => <>
+                            <div className="commentSection mt-3">
+                                {user.filter(u => u.id == comment.user).map((user) => <>
+                                    <a href={`/profile/${comment.user}`}>
+                                        <OverlayTrigger
+                                            placement="right"
+                                            delay={{ show: 700, hide: 300 }} key={user.id}
+                                            overlay={<Popover id={user.id} >
+                                                <div className="card">
+                                                    <div className="card-header t" >
+                                                        <Image src={localStorage.getItem(`photo-${comment.user}`) !==
+                                                            localStorage.getItem(`photo-`) ?
+                                                            (localStorage.getItem(`photo-${posts.user}`))
+                                                            : (process.env.PUBLIC_URL + "empty profile.png")}
+                                                            className="profile_img"
+                                                            width="90"
+                                                            height="90"
+                                                            alt="pic"
+
+                                                        />
+                                                        <b className="lead ml-4">{user.first_name} {user.last_name}</b>
+
+                                                    </div>
+                                                    <div className="card-body b">
+                                                        <p className="">A beginner programmer ! And I am learning react and django .</p>
+                                                        <p><i className="fa fa-envelope fa-fw margin-right text-theme"></i> {user.email}</p>
+
+                                                    </div>
+                                                </div>
+                                            </Popover>}
+                                        >
+
+                                            <Image src={localStorage.getItem(`photo-${comment.user}`) !==
+                                                localStorage.getItem(`photo-`) ?
+                                                (localStorage.getItem(`photo-${comment.user}`))
+                                                : (process.env.PUBLIC_URL + "empty profile.png")}
+                                                className="profile_img mt-2"
+                                                width="31"
+                                                height="31"
+                                                alt="pic"
+                                                roundedCircle
+                                            />
+
+                                        </OverlayTrigger></a>
+                                </>)}
+                                <div className="container">
+
+                                    <small className="card-title "
+                                        style={{ fontSize: "13px", fontWeight: "650", }}>{comment.user_name1}
+                                    </small>
+                                    <small className="text-muted ml-2 "
+                                        style={{ fontSize: "11px" }}
+                                    >
+                                        {(new Date(comment.pub_date)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$2 $1 ')}
+                                    </small>{comment.user == localStorage.getItem('current_user_id') ? (<>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                            className="fa fa-info-circle ml-5 text-muted small"
+                                            data-toggle="popover"
+                                            title="Click here to delete this comment"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => axiosInstance.delete(`/comment/${comment.id}/`).then(window.location.reload())}
+                                        ></i></>) : (null)}
+
+                                    <p className="card-text " style={{ fontSize: "14px" }}>
+                                        {comment.comment_text}
+                                    </p>
+                                </div>
+                            </div>
+                        </>)
+                    }
+
+                </Modal.Title>
+            </Modal.Header>
+
+        </Modal> 
+
         <Modal size="lg" className="" show={isLogedin} onHide={() => setIsLogedin(false)} aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Header closeButton className=" ">
                 <p>Don't have an account?<a href="/signup"> Click here</a></p>
@@ -79,8 +163,8 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
 
         <Modal size="lg"
             className=""
-            show={showComment}
-            onHide={close}
+            show={addComment}
+            onHide={()=>setAddComment(false)}
             aria-labelledby="contained-modal-title-vcenter"
             centered>
             <Modal.Header closeButton className="modal-top ">
@@ -197,7 +281,7 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
 
                         <div className="display" id={`${posts.id}`}
                             onClick={localStorage.getItem('current_user_id') != null ?
-                                (() => setShowComment(true))
+                                (() => setAddComment(true))
                                 : (() => setIsLogedin(true))} >
                             <i className="fa fa-comments fa-2x "></i>
                             <p data-toggle="popover"
@@ -238,7 +322,7 @@ export default function Posts_old({ postComments, comment, Contents, handleMouse
 
                                     <p className="card-text " style={{ fontSize: "14px" }}
                                         onClick={() => axiosInstance.delete(`/comment/${comment.id}/`)}>
-                                        {comment.comment_text} <a href="#" className="ml-5">see all comments &nbsp;
+                                        {comment.comment_text} <a onClick={() => setShowComment(true)} className="ml-5">see all comments &nbsp;
                                                                                 <i className="fa fa-angle-double-right  "></i>
                                         </a>
 

@@ -61,7 +61,7 @@ function Profile({ match }) {
     const handleModalView = () => setModalView(true);
     const [isLogedin, setIsLogedin] = useState(false)
     const [addComment, setAddComment] = useState(false);
-    const close = () => setShowComment(false);
+
     const [appState, setAppState] = useState({
 		loading: true,
         user: [{id:'',username:'',first_name:'',last_name:'',date_joined:'', email:'',}],
@@ -445,7 +445,7 @@ function Profile({ match }) {
                                         <Modal size="lg"
                                             className=""
                                             show={addComment}
-                                            onHide={close}
+                                            onHide={() => setShowComment(false)}
                                             aria-labelledby="contained-modal-title-vcenter"
                                                 centered>
                                             <Modal.Header closeButton className="modal-top ">
@@ -483,7 +483,7 @@ function Profile({ match }) {
                                                             <Modal size="lg"
                                                                 className=""
                                                                 show={showComment}
-                                                                onHide={close}
+                                                                onHide={()=>setShowComment(false)}
                                                                 aria-labelledby="contained-modal-title-vcenter"
                                                                 centered>
                                                                 <Modal.Header closeButton className="modal-top ">

@@ -41,11 +41,8 @@ export default function Posts({ posts,user,comment }) {
 
     const editPost = (event) => {
         event.preventDefault();
-        const Url = `/posts_later/${posts.id}/`
-        axiosInstance.delete(Url).then((res) => {
-            window.location.reload(true);
-            console.log(res.data);
-        });
+        alert('under construction !!')
+
     }
 
     const inputChanged = (event) => {
@@ -85,7 +82,7 @@ export default function Posts({ posts,user,comment }) {
         <Modal size="lg"
             className=""
             show={addComment}
-            onHide={close}
+            onHide={() => setAddComment(false)}
             aria-labelledby="contained-modal-title-vcenter"
             centered>
             <Modal.Header closeButton className="modal-top ">

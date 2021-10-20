@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 
-const baseURL = 'https://branchapp.xyz/api/';
+const baseURL = 'https://branchappxzy.herokuapp.com/';
 
  const axiosInstance = axios.create({
 	baseURL: baseURL,
