@@ -1,2 +1,2 @@
 # plant-app-react
-#front-end code using React JS for a plant based web app
+#front-end code using React JS for my plant based web app https://branchapp.xyz/
