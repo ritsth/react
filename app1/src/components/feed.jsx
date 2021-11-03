@@ -4,9 +4,9 @@ import Slider from "react-slick";
 import axiosInstance from '../axios';
 import { Component } from 'react';
 import { Card, Button, Row, Col, Image, Modal, Container, OverlayTrigger, Tooltip, Popover, Spinner } from 'react-bootstrap';
-import Posts from './posts'
-import C_post from './create_post'
-import Posts_old from './posts_old'
+import Posts from './posts';
+import C_post from './create_post';
+import Posts_old from './posts_old';
 
 
 
@@ -56,10 +56,8 @@ export default class Feed extends Component {
         user: [{ id: '', username: '', first_name: '', last_name: '', date_joined: '', email: '', }],
         posts: [{ id: '', status: '', pub_date: '' ,post_img:'',type:'',user:'',user_name3:'',type_name:''}],
         posts_old: [{ id: '', status: '', pub_date: '', post_img: '', type: '', user: '', user_name3: '' }],
-        profile_photo: [{ user: '',profile_photo: ''}],
         comments: [{comment_text:'',pub_date:'',user:'',user_name1:'',id:'',post:''}],
         loading:true,
-          
     };
 
 
@@ -90,6 +88,7 @@ export default class Feed extends Component {
                 const data= res.data;
                 this.setState({ loading: false,  comments: data});
             });
+
 
     };
 
@@ -149,11 +148,7 @@ export default class Feed extends Component {
                                              : (  this.state.posts.map((posts) => {
                                              
                                                              return <Posts
-                                                                 handleClose={this.handleClose}
-                                                                 handleMouseEnter={this.handleMouseEnter}
-                                                                 handleMouseLeave={this.handleMouseLeave}
                                                                  posts={posts}
-                                                                 delayHandler={this.state.delayHandler}
                                                                  user={this.state.user}
                                                                  comment={this.state.comments}
                                                                 />
@@ -183,15 +178,12 @@ export default class Feed extends Component {
                                      : (this.state.posts_old.map((posts) => {
 
                                          return <Posts_old
-                                             handleClose={this.handleClose}
-                                             handleMouseEnter={this.handleMouseEnter}
-                                             handleMouseLeave={this.handleMouseLeave}
-                                             Contents={this.Contents}
-                                             postComments={this.postComments}
                                              posts={posts}
-                                             delayHandler={this.state.delayHandler}
                                              user={this.state.user}
                                              comment={this.state.comments}
+                                             profile_photo={this.state.profile_photo}
+
+                           
                                          />
                                      }
                                      ))}

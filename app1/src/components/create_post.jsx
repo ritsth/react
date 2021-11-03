@@ -10,6 +10,8 @@ export default function C_post(props) {
     const [ModalState, setModalState] = useState(false);
     const [isLogedin, setIsLogedin] = useState(false)
     const history = useHistory();
+
+    const [error, setError] = useState(true)
     const initialPostData = Object.freeze({
         user:'',
         type: '',
@@ -87,7 +89,25 @@ export default function C_post(props) {
     const Select = (event) => {
         UpdatePostData({ ...postData, type: event.target.value });
     }
+    const [profilePhoto, setProfilePhoto] = useState({
+        data: [{
+            user: '',
+            Profile_photo: '',
+        }]
+    })
     useEffect(() => {
+        axiosInstance.get(`/profile_photo/${localStorage.getItem('current_user_id')}/`).then((res) => {
+            const Data = res.data;
+            setProfilePhoto({ data: Data });
+            console.log(profilePhoto.data);
+        })
+            .catch((err) => {
+                if (err = 'Request failed with status code 404') {
+                    setError(false)
+                }
+                console.log(err);
+                console.log(error);
+            })
         if (localStorage.getItem('current_user_id') !== null) {
             var Url = `/plants/`;
             axiosInstance.get(Url).then((res) => {
@@ -106,9 +126,9 @@ export default function C_post(props) {
                     roundedCircle
                     width="47"
                     height="44"
-                    className="profile_img"
-                    src={localStorage.getItem(`photo-${localStorage.getItem('current_user_id')}`) !==
-                        localStorage.getItem(`photo-`) ? (localStorage.getItem(`photo-${localStorage.getItem('current_user_id')}`))
+                    className="profile_img" 
+                        src={localStorage.getItem('current_user_id') !== null & error == true
+                            ? (profilePhoto.data.Profile_photo)
                         : (process.env.PUBLIC_URL + "empty profile.png")} /></a>
                 <big className="ml-4"
                     data-toggle="popover"

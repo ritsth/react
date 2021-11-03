@@ -5,6 +5,7 @@ import {Form,Button,FormControl,Navbar,Nav, NavDropdown,} from 'react-bootstrap'
 import logo from './logo.svg';
 import Google from '../Google';
 import axiosInstance from '../axios';
+import Search_bar from './search_bar';
 
 
 class Navcom extends Component {
@@ -31,10 +32,7 @@ class Navcom extends Component {
         const data = this.state.value
         console.log(this.state.value2)
     };
-    searchUpdate() {
 
-        return this.state.value2 != 0 ? <Google SearchWord={this.state.value2} /> : null;
-    }
     notif_Condition = (e) => {
         if (localStorage.getItem(`${e}`) > 60) {
             axiosInstance
@@ -110,6 +108,10 @@ class Navcom extends Component {
         this.setState({ count: 0 });
         localStorage.setItem('count',0)
     }
+    searchUpdate() {
+
+        return this.state.value2 != 0 ? <Search_bar SearchWord={this.state.value2} /> : null;
+    }
     render(){
         return (
 
@@ -159,7 +161,7 @@ class Navcom extends Component {
                                 {localStorage.getItem('current_user') === null ? (<Nav.Link className="mr-4 ml-4" href="/signup">Sign up</Nav.Link>) :
                                     (<Nav.Link className="mr-4 ml-4" href="/logout">Logout</Nav.Link> )}
 
-                                 <input className="form-control mr-sm-2 ml-3" type="search" placeholder="Search" aria-label="Search" value={this.state.value} onChange={this.handleChange} />
+                                 <input className="form-control mr-sm-2 ml-3" type="search" placeholder="Search plant types" aria-label="Search" value={this.state.value} onChange={this.handleChange} />
                                  <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">
                                      <i class="fa fa-search"></i>
                                  </button>

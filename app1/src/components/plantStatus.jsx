@@ -12,6 +12,7 @@ function PlantStatus({match}) {
     });
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         const add = parseInt(match.params.userId)
         axiosInstance.get(`/humidity/${add}/`).then((res) => {
@@ -42,8 +43,8 @@ function PlantStatus({match}) {
             :
             (<>
                 {humidityState.data.humidity}
-            </>)}
-    
+
+            </>)}<br/>
     </>);
 }
 export default PlantStatus

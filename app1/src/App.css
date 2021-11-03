@@ -121,8 +121,6 @@ figcaption {
     background-color:teal;
     padding:40px;
     text-align:center;    
-    display:flex;
-    overflow-x:visible;
     margin:10px;
 }
 .profileCrop .cropper-crop-box,
@@ -134,6 +132,8 @@ figcaption {
     outline: 0;
 }
 
+
+/* EXTRAS NOT IN USE:
 span.scrabble-tile__letter {
     display: inline-block;
     border: 1px solid;
@@ -170,6 +170,8 @@ span.scrabble-tile__letter > span.scrabble-tile__number {
     font-size: .75rem;
     line-height: 1rem;
 }
+*/
+
 /*LoginPage and SignUp page*/
 .figcap {
     position: absolute;
@@ -222,8 +224,8 @@ span.scrabble-tile__letter > span.scrabble-tile__number {
     letter-spacing: 3px;
     font-size: 20px;
     font-weight: 500;
-    position: absolute;
-    top: 155px;
+    position: relative;
+    top: 30px;
     width:98%;
     left:64px;
     padding: 20px;
@@ -273,8 +275,6 @@ span.scrabble-tile__letter > span.scrabble-tile__number {
     cursor:pointer;
 }
 
-
-
 .index_p {
     position: absolute;
     display: block;
@@ -285,7 +285,6 @@ span.scrabble-tile__letter > span.scrabble-tile__number {
     color: white;
     right: 60px;
     top: 98px;
-   
     cursor:pointer;
 }
 .user{
@@ -378,9 +377,7 @@ blockquote {
 
 
 
-
-/* #endregion */
-/* #region cards slider */
+/* EXTRAS NOT IN USE:
 .cards-slider-wrapper {
     display: flex;
     position: absolute;
@@ -432,4 +429,4 @@ blockquote {
             left: 45px;
 
 }
-
+*/

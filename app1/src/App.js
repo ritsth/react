@@ -38,8 +38,7 @@ function App({}) {
             
             <BrowserRouter>
                    <Route path="/feed" >
-                       <Feed
-                            />
+                       <Feed/>
                    </Route>
                     <Route path='/plantStatus/:userId' render={props => <PlantStatus {...props} />} />
                    

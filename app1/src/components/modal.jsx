@@ -17,6 +17,7 @@ export default function ModalPhoto({ User_id }) {
     const initialFormData = Object.freeze({
         user_id: `${localStorage.getItem('current_user_id')}`,
         Profile_photo: '',
+        photo_no: ''
     });
 
 
@@ -26,6 +27,7 @@ export default function ModalPhoto({ User_id }) {
     const [cropData, setCropData] = useState(initialFormData);
     const [cropper, setCropper] = useState();
 
+    const [error, setError] = useState(false)
     const fileSelector = (event) => {
 
         const reader = new FileReader();
@@ -36,24 +38,33 @@ export default function ModalPhoto({ User_id }) {
         setImg({ i: event.target.files[0] });
         setCropModal(true);
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const dataurl = cropper.getCroppedCanvas().toDataURL()
+        axiosInstance.get(`/profile_photo/${User_id}/`).then((res) => {
+            const Data = res.data;
+        }).catch((err) => {
+            if (err = 'Request failed with status code ') {
+                setError(true)
+            }
+            console.log(error)
+        })
         cropper.getCroppedCanvas().toBlob((blob) => {
             const formData = new FormData();
             const URL = '/profile_photo/';
             const Url =`/profile_photo/${User_id}/`;
             formData.append('Profile_photo', blob, `${Img.i.name}`);
             console.log(blob);
-            if (localStorage.getItem(`photo-${User_id}`) == null) {
+
+            if ( error == true) {
                 axiosInstance
                     .post(URL, formData)
                     .then((res) => {
                         console.log(res.data);
                         const data = res.data;
                         setCropData({ cropData: data });
-                        localStorage.setItem(`photo-${res.data.user}`, dataurl);
-                        window.location.reload(true);console.log(localStorage.getItem(`photo-${res.data.user}`));
+                        window.location.reload(true);
                     })
                     .catch((err) => console.log(err));
             } else {
@@ -63,7 +74,6 @@ export default function ModalPhoto({ User_id }) {
                         console.log(res.data);
                         const data = res.data;
                         setCropData({ cropData: data });
-                        localStorage.setItem(`photo-${res.data.user}`, dataurl);
                         window.location.reload(true);
                     })
                     .catch((err) => console.log(err));
@@ -81,7 +91,7 @@ export default function ModalPhoto({ User_id }) {
         <>         
             {localStorage.getItem('current_user_id') == User_id ?
                 (<>
-            <Button  variant="" onClick={handleShow} data-toggle="popover"
+                <Button  variant="" onClick={handleShow} data-toggle="popover"
                         title="upload photo">
                 <i className="fa fa-camera circle-icon"> </i>
                     </Button>

@@ -4,8 +4,11 @@ import { Card, Button, Row, Col, Image, Modal, Container, ListGroup, OverlayTrig
 import axios from 'axios';
 import Comments_modal from './comments_modal';
 import Comment from './comments';
+import Profile_comments_modal from './profile_comments_modal';
+import Profile_comments from './profile_comments';
+import p from './profileLogo.svg';
 
-export default function Posts_old({ posts, user, comment }) {
+export default function P({ posts, user, comment }) {
 
     const pub_date = (new Date(posts.pub_date)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2 $3');
     const [isLogedin, setIsLogedin] = useState(false)
@@ -58,7 +61,7 @@ export default function Posts_old({ posts, user, comment }) {
     ));
     const deletePost = (event) => {
         event.preventDefault();
-        const Url = `/posts_later/${posts.id}/`
+        const Url = `/posts_now/${posts.id}/`
         axiosInstance.delete(Url).then((res) => {
             window.location.reload(true);
         });
@@ -141,48 +144,18 @@ export default function Posts_old({ posts, user, comment }) {
             <div key={posts.id} className="cards" >
                 <div className="card-header card-top"><Row><Col sm={10}>
 
-                    {user.filter(u => u.id == posts.user).map((user) => <>
 
-                        <OverlayTrigger
-                            placement="right"
-                            delay={{ show: 700, hide: 300 }} key={user.id}
-                            overlay={<Popover id={user.id} >
-                                <div className="card">
-                                    <div className="card-header t" >
-                                        <Image src={error == false ? (profilePhoto.data.Profile_photo)
-                                            : (process.env.PUBLIC_URL + "empty profile.png")}
-                                            className="profile_img"
-                                            width="90"
-                                            height="90"
-                                            alt="pic"
-                                        />
-                                        <b className="h6 ml-1">{user.first_name} {user.last_name}</b>
-
-                                    </div>
-                                    <div className="card-body b">
-                                        <p>Exploring the plant world.</p>
-                                        <p><i className="fa fa-clock-o fa-fw margin-right text-theme ">
-                                        </i>
-                                            {(new Date(user.date_joined)).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2 $3')}
-                                            <br />
-                                            <i className="fa fa-envelope fa-fw margin-right text-theme"></i> {user.email}</p>
-                                    </div>
-                                </div>
-                            </Popover>}
-                        >
 
                             <Image src={error == false ? (profilePhoto.data.Profile_photo)
-                                : (process.env.PUBLIC_URL + "empty profile.png")}
+                                : (p)}
                                 className="profile_img"
                                 width="40"
                                 height="40"
                                 alt="pic"
                                 roundedCircle
                                 style={{ cursor: "pointer" }}
-
                             />
-                        </OverlayTrigger>
-                    </>)}
+        
 
                     <blockquote ><a href={`/profile/${posts.user}`} style={{ color: "black" }}>{posts.user_name3}</a></blockquote>
                 </Col>
@@ -241,14 +214,14 @@ export default function Posts_old({ posts, user, comment }) {
                                 show={showComment}
                                 onHide={close}
                                 aria-labelledby="contained-modal-title-vcenter"
-                                centered>
+                               centered>
                                 <Modal.Header closeButton className="modal-top ">
                                     All Comments
                                                                 </Modal.Header>
                                 <Modal.Header >
                                     <Modal.Title>
                                         {comment.filter(c => c.post == posts.id).map((comments) => {
-                                            return <Comments_modal
+                                            return <Profile_comments_modal
                                                 comment={comments}
                                                 user={user}
                                             />
@@ -260,18 +233,18 @@ export default function Posts_old({ posts, user, comment }) {
 
                             </Modal>
                             {comment.filter(c => c.post == posts.id).slice(0, 1).map((comments) => {
-                                return <Comment
+                                return <Profile_comments
                                     comment={comments}
                                     user={user}
+                                    setShowComment={showComment}
                                 />
                             })}
+                            <a href="#" className="ml-5 "
+                                onClick={() => setShowComment(true)}>see all comments &nbsp;
+                                                                <i className="fa fa-angle-double-right  "></i>
+                            </a>
 
-                            {comment.filter(c => c.post == posts.id).slice(0, 1).map((comments) => {
-                                <a href="#" className="ml-5 "
-                                    onClick={() => setShowComment(true)}>see all comments &nbsp;
-                                    <i className="fa fa-angle-double-right  "></i>
-                                </a>
-                            })}
+
                         </div>
                     </Col>
                 </Row>
@@ -281,3 +254,4 @@ export default function Posts_old({ posts, user, comment }) {
     );
 
 }
+
