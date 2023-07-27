@@ -46,8 +46,7 @@ function App({}) {
                         <Home />
                     </Route>
                     <Route path='/profile/:userId' render={props => <Profile {...props}/>} />
-                       
-         
+                    
                     <Route path="/signup"  >
                         <SignUp />
                     </Route>
@@ -57,7 +56,7 @@ function App({}) {
                     <Route path="/logout"  >
                         <Logout />
                     </Route>
-                </BrowserRouter>
+            </BrowserRouter>
                 
 		</div>
 	);

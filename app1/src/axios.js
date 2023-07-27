@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 
 const baseURL = 'https://branchappxzy.herokuapp.com/';
 
- const axiosInstance = axios.create({
-	baseURL: baseURL,
+ const axiosInstance = axios.create({   //creating a axios instance for every other request
+	baseURL: baseURL,					
 	timeout: 5000,
 	headers: {
-		Authorization: localStorage.getItem('access_token')
-			? 'JWT ' + localStorage.getItem('access_token')
+		Authorization: localStorage.getItem('access_token')		//get access token for
+			? 'JWT ' + localStorage.getItem('access_token')		//authorization to request data for API
 			: null,
 		'Content-Type': 'application/json' ,
-		accept: 'application/json',
+		accept: 'application/json',							//
 	},
  });
 axiosInstance.interceptors.response.use(
