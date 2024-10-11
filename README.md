@@ -78,9 +78,9 @@ We welcome contributions from the community! Feel free to submit issues or pull 
 This project is licensed under the MIT License.
 
 ## Links
-Web App: Branch App (currently down)
-Backend Code: GitHub Repository
-LinkedIn: Ritika Shrestha
+Web App: [Branch App](https://branchapp.xyz/) (currently down)
+Backend Code: [GitHub Repository](https://github.com/ritsth/branchxpp)
+LinkedIn: [Ritika Shrestha](https://www.linkedin.com/in/ritika-shrestha-817555252/))
 
 
 
