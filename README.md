@@ -27,7 +27,7 @@
 ---
 
 ## Project Architecture
-
+```r
 branch-app/
 │
 ├── backend/                # Django backend code
@@ -43,7 +43,7 @@ branch-app/
 
 
 ---
-
+```
 ## Setup & Installation
 
 ### Prerequisites
@@ -57,11 +57,14 @@ branch-app/
 ### Backend Setup
 
 1. Clone the backend repository:
+   ```bash
    git clone https://github.com/ritsth/branchxpp.git
    cd branchxpp
 2. Install Python dependencies:
+   ```bash
    pip install -r requirements.txt
-3. Run the Django server:
+4. Run the Django server:
+   ```bash
    python manage.py migrate
    python manage.py runserver
 
