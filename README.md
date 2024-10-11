@@ -2,6 +2,7 @@
 #front-end code using React JS for my plant based web app 
 https://branchapp.xyz/ (currently down because of payment due)
 
+##back-end code: https://github.com/ritsth/branchxpp
 • A Django and React JS plant-based social media web application for users to upload plants to profiles for smart remainders
 
 • Utilized Bluetooth module and humidity sensor with Arduino to obtain real-time data from plants for automated  watering notifications 
